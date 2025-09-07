@@ -34,7 +34,7 @@ WHO Global Health Estimates 2021: Deaths by Cause, Age, and Sex
 #### Windows Users
 ```bash
 # 1. Clone the repository
-git clone https://github.com/[username]/who-mortality-statistical-analysis.git
+git clone https://github.com/tao-hpu/who-mortality-statistical-analysis.git
 cd who-mortality-statistical-analysis
 
 # 2. Create virtual environment
@@ -59,7 +59,7 @@ python src/statistical_analysis.py
 #### Mac/Linux Users
 ```bash
 # 1. Clone the repository
-git clone https://github.com/[username]/who-mortality-statistical-analysis.git
+git clone https://github.com/tao-hpu/who-mortality-statistical-analysis.git
 cd who-mortality-statistical-analysis
 
 # 2. Create virtual environment
