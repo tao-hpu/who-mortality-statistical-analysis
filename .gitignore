@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+.venv
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Data files (keep only raw data)
+data/processed/*
+!data/processed/.gitkeep
+
+# Output files
+reports/figures/*
+reports/tables/*
+!reports/figures/.gitkeep
+!reports/tables/.gitkeep
+
+# Large files
+*.csv
+*.pkl
+*.h5
+
+# Logs
+*.log
+logs/
+
+# Temp files
+temp/
+tmp/
+cache/
