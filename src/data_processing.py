@@ -8,6 +8,8 @@ Data processing module for WHO mortality data
 3. 生成标准化数据格式
 4. 导出处理后的数据
 """
+import re
+import sys
 
 import pandas as pd
 import numpy as np
@@ -117,11 +119,11 @@ class WHODataProcessor:
                 if pd.notna(row[0]):
                     if "Region" in str(row[0]):
                         self.metadata["region"] = (
-                            row[1] if pd.notna(row[1]) else "Global"
+                            row[5] if pd.notna(row[5]) else "Global"
                         )
                     elif "Year" in str(row[0]):
                         self.metadata["year"] = (
-                            int(row[1]) if pd.notna(row[1]) else 2021
+                            int(row[5]) if pd.notna(row[5]) else 2021
                         )
         except:
             # 使用默认值
@@ -187,18 +189,25 @@ class WHODataProcessor:
                 continue
 
             # 检查是否是注释行或标题行
-            if any(
-                keyword in str(row[0]).lower()
-                for keyword in ["note", "source", "total", "sum"]
-            ):
+            # if any(
+            #     keyword in str(row[0]).lower()
+            #     for keyword in ["note", "source", "total", "sum"]
+            # ):
+            #     current_row += 1
+            #     continue
+
+            # 检查是否有疾病编号
+            if not re.match(r'^\s*\d+\..*$',str(row[3])):
                 current_row += 1
                 continue
 
             cause_code = str(row[0]).strip()
-            cause_name = str(row[1]).strip() if pd.notna(row[1]) else "Unknown"
+            cause_name = str(row[4]).strip() if pd.notna(row[4]) else "Unknown"
+
+            print(cause_name, file=sys.stderr)
 
             # 跳过无效的死因名称
-            if cause_name == "Unknown" or cause_name == "" or pd.isna(row[1]):
+            if cause_name == "Unknown" or cause_name == "":
                 current_row += 1
                 continue
 
@@ -208,24 +217,25 @@ class WHODataProcessor:
                 # Male: 通常在第16-24列
                 # Female: 通常在第27-35列
 
+                # TODO 没有区分年龄组的 both sexes 数据列
                 # 提取Both sexes数据（跳过Total列）
-                both_data = []
-                for i, age in enumerate(age_groups):
-                    col_idx = 6 + i  # 从第7列开始（0-indexed为6）
-                    val = row[col_idx] if col_idx < len(row) else 0
-                    both_data.append(float(val) if pd.notna(val) and val != "" else 0)
+                # both_data = []
+                # for i, age in enumerate(age_groups):
+                #     col_idx = 6 + i  # 从第7列开始（0-indexed为6）
+                #     val = row[col_idx] if col_idx < len(row) else 0
+                #     both_data.append(float(val) if pd.notna(val) and val != "" else 0)
 
                 # 提取Male数据
                 male_data = []
                 for i, age in enumerate(age_groups):
-                    col_idx = 17 + i  # Male数据起始列
+                    col_idx = 9 + i  # Male数据起始列
                     val = row[col_idx] if col_idx < len(row) else 0
                     male_data.append(float(val) if pd.notna(val) and val != "" else 0)
 
                 # 提取Female数据
                 female_data = []
                 for i, age in enumerate(age_groups):
-                    col_idx = 28 + i  # Female数据起始列
+                    col_idx = 17 + i  # Female数据起始列
                     val = row[col_idx] if col_idx < len(row) else 0
                     female_data.append(float(val) if pd.notna(val) and val != "" else 0)
 
@@ -236,7 +246,7 @@ class WHODataProcessor:
                             "cause_code": cause_code,
                             "cause_name": cause_name,
                             "age_group": age_group,
-                            "both_sexes": both_data[i],
+                            "both_sexes": male_data[i] + female_data[i], # TODO 改用男+女记录
                             "male": male_data[i],
                             "female": female_data[i],
                         }
