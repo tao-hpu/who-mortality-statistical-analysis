@@ -70,7 +70,14 @@ who-mortality-statistical-analysis/
 ├── figures/                      # Generated visualizations
 │   ├── statistical_analysis_overview.png
 │   ├── correlation_heatmap.png
-│   └── age_mortality_pattern.png
+│   ├── age_mortality_pattern.png
+│   └── screenshots/              # JASP analysis screenshots
+│       ├── ss-01.png            # Data structure
+│       ├── ss-02.png            # Descriptive statistics
+│       ├── ss-03.png            # Kruskal-Wallis test
+│       ├── ss-04.png            # Games-Howell post-hoc
+│       ├── ss-05.png            # Mean plot with error bars
+│       └── ss-06.png            # Boxplot distribution
 │
 ├── notebooks/                    # Jupyter exploration notebooks
 │   └── 01_initial_exploration.ipynb
