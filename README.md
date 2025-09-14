@@ -114,7 +114,7 @@ Implements comprehensive statistical testing:
 Generates publication-quality figures:
 - Multi-panel statistical overview
 - Correlation heatmaps
-- U-shaped mortality curve visualization
+- J-shaped mortality curve visualization (exponential pattern)
 
 ## 📊 Key Findings
 
@@ -126,9 +126,10 @@ Generates publication-quality figures:
 | Chi-square | χ² = 6.37e7 | <0.001 | V = 0.434 | Strong dependency |
 
 ### Mortality Patterns
-- **U-shaped distribution**: High in infancy → Low in youth → Rising with age
+- **J-shaped distribution**: Lowest at 5-14 years → Continuous exponential rise with age
 - **Peak mortality**: 70+ age group (252,819 mean deaths)
-- **Lowest mortality**: 15-29 age group (14,847 mean deaths)
+- **Lowest mortality**: 5-14 age group (6,486 mean deaths)
+- **Mortality ratio**: 70+/5-14 = 39x
 - **Gender ratio**: Male/Female = 1.17
 
 ### Top 5 Causes of Death (2021)
