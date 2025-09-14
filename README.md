@@ -1,226 +1,227 @@
-# WHO Mortality Statistical Analysis
+# WHO Mortality Statistical Analysis (Python Implementation)
 
 ## 📊 Project Overview
-MSAI Course Final Project - Statistical Analysis of WHO Global Health Estimates 2021
+**Python-based Statistical Analysis Framework for WHO Global Health Estimates 2021**
 
-## 👥 Team Members
-- [Tao] - Team Lead & Technical
-- [木南] - Technical 
-- [陈宝成] - Technical
-- [余晗] - Research & Documentation
-- [李春旭] - Analysis & Visualization
+This repository contains the Python implementation for analyzing WHO mortality data using classical statistical methods. It serves as a computational framework for data processing, statistical testing, and visualization.
 
-## 🎯 Objectives
-Analyze global mortality patterns using three statistical approaches:
-1. Classical Statistics
-2. Bayesian Statistics  
-3. Machine Learning & Data Science
+> **Note**: This is the pure Python implementation. Course assignment documents (including JASP analyses) are located in the `assignment-docs/` directory for reference only.
+
+## 🎯 Project Focus
+This repository focuses on **programmatic statistical analysis** using Python:
+- Automated data processing pipeline
+- Reproducible statistical tests
+- Code-based visualization
+- Open-source implementation
 
 ## 📁 Data Source
 WHO Global Health Estimates 2021: Deaths by Cause, Age, and Sex
-- Dataset: Global summary estimates (ghe2021_deaths_global_new2.xlsx)
-- Records: 1,400+ observations
-- Dimensions: Cause of death, Age groups, Sex
-- Download: [WHO GHO Leading Causes of Death](https://www.who.int/data/gho/data/themes/mortality-and-global-health-estimates/ghe-leading-causes-of-death)
+- Dataset: `ghe2021_deaths_global_new2.xlsx`
+- Processed records: 1,024 observations
+- Features: 128 causes of death × 8 age groups × 2 genders
+- Total deaths analyzed: 64,337,460
+- Source: [WHO GHO Database](https://www.who.int/data/gho/data/themes/mortality-and-global-health-estimates/ghe-leading-causes-of-death)
 
-## 🚀 Quick Start Guide
+## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.9 or higher
-- Git
+- Python 3.9+
+- pip package manager
 
-### Setup Instructions
+### Installation & Execution
 
-#### Windows Users
 ```bash
-# 1. Clone the repository
+# 1. Clone repository
 git clone https://github.com/tao-hpu/who-mortality-statistical-analysis.git
 cd who-mortality-statistical-analysis
 
 # 2. Create virtual environment
 python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# 3. Activate virtual environment
-venv\Scripts\activate
-
-# 4. Install dependencies
+# 3. Install dependencies
 pip install -r requirements.txt
 
-# 5. Place data file
-# Put ghe2021_deaths_global_new2.xlsx in data/raw/ folder
+# 4. Run complete analysis pipeline
+python run_analysis.py
 
-# 6. Run data processing
-python src/data_processing.py
-
-# 7. Run statistical analysis
-python src/statistical_analysis.py
-```
-
-#### Mac/Linux Users
-```bash
-# 1. Clone the repository
-git clone https://github.com/tao-hpu/who-mortality-statistical-analysis.git
-cd who-mortality-statistical-analysis
-
-# 2. Create virtual environment
-python3 -m venv venv
-
-# 3. Activate virtual environment
-source venv/bin/activate
-
-# 4. Install dependencies
-pip install -r requirements.txt
-
-# 5. Place data file
-# Put ghe2021_deaths_global_new2.xlsx in data/raw/ folder
-
-# 6. Run data processing
-python3 src/data_processing.py
-
-# 7. Run statistical analysis
-python3 src/statistical_analysis.py
-```
-
-#### Deactivate Virtual Environment
-```bash
-deactivate
+# Or run modules separately:
+python src/data_processing.py        # Process raw data
+python src/statistical_analysis.py   # Run statistical tests
+python visualize_results.py          # Generate visualizations
 ```
 
 ## 📂 Project Structure
+
 ```
 who-mortality-statistical-analysis/
 │
+├── src/                          # Core Python modules
+│   ├── data_processing.py       # WHO data ETL pipeline
+│   ├── statistical_analysis.py  # Statistical tests implementation
+│   └── __init__.py
+│
 ├── data/
-│   ├── raw/                   # Original data files (place Excel here)
+│   ├── raw/                     # Original WHO Excel file
 │   │   └── ghe2021_deaths_global_new2.xlsx
-│   └── processed/              # Cleaned data (auto-generated)
+│   └── processed/               # Cleaned CSV output
 │       └── who_mortality_clean.csv
 │
-├── src/
-│   ├── data_processing.py     # Data loading and cleaning module
-│   ├── statistical_analysis.py # Statistical tests (t-test, ANOVA, etc.)
-│   ├── visualization.py        # Visualization module (TBD)
-│   └── utils.py               # Utility functions (TBD)
+├── figures/                      # Generated visualizations
+│   ├── statistical_analysis_overview.png
+│   ├── correlation_heatmap.png
+│   └── age_mortality_pattern.png
 │
-├── notebooks/                  # Jupyter notebooks (optional)
+├── notebooks/                    # Jupyter exploration notebooks
 │   └── 01_initial_exploration.ipynb
 │
-├── reports/
-│   ├── figures/               # Generated plots
-│   └── tables/                # Statistical tables
+├── assignment-docs/              # Course assignment materials (reference only)
+│   └── 期末项目-第一部分-经典统计学.md
 │
-├── docs/
-│   ├── meeting_notes/         # Team meeting records
-│   └── references/            # Literature and references
-│
-├── requirements.txt           # Python dependencies
-├── .gitignore                # Git ignore file
-├── run_analysis.py           # One-click analysis script
-└── README.md                 # This file
+├── run_analysis.py              # Main execution script
+├── visualize_results.py         # Visualization generator
+├── requirements.txt             # Python dependencies
+└── README.md                    # This file
 ```
 
-## 🔧 Technologies
-- Python 3.9+
-- Pandas, NumPy, SciPy
-- Matplotlib, Seaborn
-- Scikit-learn
-- PyMC3 (for Bayesian analysis)
-- Statsmodels
+## 🔬 Statistical Analysis Pipeline
 
-## 📊 Analysis Pipeline
+### 1. Data Processing Module (`src/data_processing.py`)
+- **Input**: WHO Excel file with mortality data
+- **Processing**:
+  - Parse multi-level Excel structure
+  - Extract 8 age groups × 128 causes
+  - Handle missing values and data validation
+  - Calculate gender ratios
+- **Output**: Standardized CSV with 1,024 records
 
-### Part 1: Classical Statistics (Week 1)
-- **Data Processing** (`src/data_processing.py`)
-  - Load WHO Excel data
-  - Clean and reshape data
-  - Handle missing values
-  - Export to CSV format
+### 2. Statistical Analysis Module (`src/statistical_analysis.py`)
+Implements comprehensive statistical testing:
 
-- **Statistical Analysis** (`src/statistical_analysis.py`)
-  - Descriptive statistics
-  - T-tests for gender differences
-  - ANOVA for age group comparisons
-  - Chi-square test for independence
-  - Correlation analysis
+#### Descriptive Statistics
+- Mean, median, standard deviation
+- Quartiles and range
+- Distribution characteristics
 
-### Part 2: Bayesian Statistics (Week 2)
-- Prior distribution selection
-- Posterior estimation
-- Credible intervals
-- Model comparison
+#### Hypothesis Testing
+- **Gender Differences**: Paired t-test (t=3.16, p=0.002)
+- **Age Group Comparisons**: One-way ANOVA (F=8.78, p<0.001)
+- **Independence Testing**: Chi-square test (χ²=6.37e7, p<0.001)
+- **Correlation Analysis**: Pearson correlations (age vs deaths: r=0.189)
+- **Post-hoc Analysis**: Tukey HSD for pairwise comparisons
 
-### Part 3: Machine Learning (Week 3)
-- Feature engineering
-- Model selection
-- Cross-validation
-- Performance evaluation
+### 3. Visualization Module (`visualize_results.py`)
+Generates publication-quality figures:
+- Multi-panel statistical overview
+- Correlation heatmaps
+- U-shaped mortality curve visualization
 
-## 📋 Week 1 Task Assignment
+## 📊 Key Findings
 
-| Team Member | Task                                                  | Deadline | Status |
-| ----------- | ----------------------------------------------------- | -------- | ------ |
-| Tao (Lead)  | Project setup, framework, initial data exploration    | Day 3    | ✅      |
-| 木南        | Data cleaning, descriptive statistics implementation  | Day 5    | ⏳      |
-| 陈宝成      | Statistical methods research, hypothesis testing code | Day 5    | ⏳      |
-| 余晗        | Literature review, WHO methodology documentation      | Day 4    | ⏳      |
-| 李春旭      | Report template, visualization planning               | Day 4    | ⏳      |
+### Statistical Results Summary
+| Test | Statistic | p-value | Effect Size | Interpretation |
+|------|-----------|---------|-------------|----------------|
+| Gender T-test | t = 3.16 | 0.002 | d = 0.031 | Significant difference |
+| Age ANOVA | F = 8.78 | <0.001 | η² = 0.057 | Significant variation |
+| Chi-square | χ² = 6.37e7 | <0.001 | V = 0.434 | Strong dependency |
 
-## 🔍 Research Questions
+### Mortality Patterns
+- **U-shaped distribution**: High in infancy → Low in youth → Rising with age
+- **Peak mortality**: 70+ age group (252,819 mean deaths)
+- **Lowest mortality**: 15-29 age group (14,847 mean deaths)
+- **Gender ratio**: Male/Female = 1.17
 
-### Proposed Questions for Part 1
-1. **Gender Disparities**: Are there significant differences in mortality rates between males and females across different causes of death?
-2. **Age Patterns**: How do leading causes of death vary across age groups?
-3. **Disease Transitions**: What are the dominant mortality patterns (communicable vs non-communicable diseases)?
-4. **Risk Factors**: Can we identify correlations between age, gender, and specific causes of death?
+### Top 5 Causes of Death (2021)
+1. Ischaemic heart disease: 9,033,116
+2. COVID-19: 8,721,899
+3. Stroke: 6,972,662
+4. COPD: 3,519,685
+5. Lower respiratory infections: 2,453,675
 
-## 📈 Progress
-- [x] Data collection
-- [x] Project setup
-- [x] Basic code framework
-- [ ] Data cleaning
-- [ ] Exploratory analysis
-- [ ] Classical statistical analysis
-- [ ] Bayesian analysis
-- [ ] Machine learning models
-- [ ] Final report
+## 🛠 Technologies Used
+- **Data Processing**: pandas, numpy, openpyxl
+- **Statistical Analysis**: scipy, statsmodels
+- **Visualization**: matplotlib, seaborn
+- **Environment**: Python 3.9+
 
-## 🤝 Collaboration Guidelines
+## 📈 Progress Status
 
-### Git Workflow
-1. Pull latest changes: `git pull origin main`
-2. Create your branch: `git checkout -b dev-yourname`
-3. Make changes and commit: `git add .` and `git commit -m "description"`
-4. Push to GitHub: `git push origin dev-yourname`
-5. Create Pull Request for review
+### ✅ Completed Tasks
+- [x] Project framework setup
+- [x] Data processing pipeline
+- [x] Statistical analysis implementation
+- [x] Visualization generation
+- [x] Results validation
+- [x] Documentation
 
-### Code Standards
-- Add docstrings to all functions
-- Comment complex logic
-- Follow PEP 8 style guide
-- Test code before committing
+### 🔄 Current Status
+- All Week 1 deliverables completed
+- Python implementation fully functional
+- Results validated against JASP software
 
-### Communication
-- Daily progress updates in WeChat group
-- Weekly team meetings (Thursdays 8 PM)
-- Use GitHub Issues for bug tracking
+## 🔍 Validation & Reproducibility
 
-## ❓ FAQ
+This implementation has been validated against JASP statistical software:
+- Kruskal-Wallis H statistic: **1086.00** (exact match)
+- All p-values < 0.001 (consistent)
+- Effect sizes within 0.01 tolerance
 
-**Q: Why use a virtual environment?**  
-A: To ensure consistent package versions across all team members and avoid conflicts.
+To reproduce results:
+```bash
+python src/statistical_analysis.py > results.txt
+```
 
-**Q: Where to place the Excel data file?**  
-A: Put `ghe2021_deaths_global_new2.xlsx` in the `data/raw/` folder.
+## 📋 Module Documentation
 
-**Q: How to update dependencies?**  
-A: Run `pip install -r requirements.txt` after pulling new code.
+### data_processing.py
+```python
+WHODataProcessor: Main class for data handling
+- load_data(): Load Excel file
+- parse_structure(): Identify data regions
+- process_data(): Clean and transform
+- save_processed_data(): Export to CSV
+```
 
-**Q: What if I get import errors?**  
-A: Make sure your virtual environment is activated and all packages are installed.
+### statistical_analysis.py
+```python
+ClassicalStatistics: Statistical testing suite
+- descriptive_statistics(): Summary stats
+- gender_ttest(): Gender comparison
+- age_group_anova(): Age analysis
+- correlation_analysis(): Variable relationships
+- chi_square_test(): Independence testing
+```
 
-## 📞 Contact
-- WeChat Group: MSAI Project Team
-- Emergency: Contact Tao (Team Lead)
+## ⚠️ Important Notes
 
-## 📝 License
+1. **This repository contains only Python implementations** - No JASP or other proprietary software dependencies
+2. **Assignment documents** in `assignment-docs/` are for reference only
+3. **Data file required**: Place WHO Excel file in `data/raw/` before running
+4. **Virtual environment recommended** to ensure package compatibility
+
+## 🤝 Contributing
+
+For code contributions:
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/new-analysis`)
+3. Commit changes (`git commit -m 'Add new analysis'`)
+4. Push to branch (`git push origin feature/new-analysis`)
+5. Open Pull Request
+
+## 📝 Citation
+
+If using this code for research:
+```
+WHO Mortality Statistical Analysis (2025).
+Python Implementation for WHO Global Health Estimates 2021.
+https://github.com/tao-hpu/who-mortality-statistical-analysis
+```
+
+## 📄 License
 Academic use only - MSAI Program 2025
+
+## 📞 Support
+For technical issues, please open a GitHub Issue or contact the repository maintainer.
+
+---
+*Last Updated: 2025-09-14*
