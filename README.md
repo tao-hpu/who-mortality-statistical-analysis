@@ -51,18 +51,18 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt           # Classical analysis
 pip install -r requirements_bayes.txt     # Bayesian analysis
 
-# 4. Run complete analysis pipeline
+# 4. Run analysis modules
+
+## Data Processing
+python src/data_processing.py             # Process raw WHO data
 
 ## Classical Analysis
-python run_analysis.py                    # Complete classical pipeline
-# Or run modules separately:
-python src/data_processing.py             # Process raw data
 python src/statistical_analysis.py        # Run statistical tests
 python src/visualize_classical.py         # Generate classical visualizations
 
 ## Bayesian Analysis
-./run_bayes.sh                           # Complete Bayesian pipeline (with compiler fix)
-# Or run modules separately:
+# Set environment for PyTensor if needed
+export PYTENSOR_FLAGS='optimizer=fast_compile,floatX=float32,device=cpu,cxx='
 python src/bayes_analysis.py             # Run Bayesian analysis
 python src/visualize_bayes.py            # Generate Bayesian visualizations
 ```
@@ -107,8 +107,6 @@ who-mortality-statistical-analysis/
 │   ├── 期末项目-第一部分-经典统计学.md
 │   └── 期末项目-第二部分-贝叶斯统计学.md
 │
-├── run_analysis.py              # Classical analysis executor
-├── run_bayes.sh                 # Bayesian analysis executor
 ├── requirements.txt             # Classical dependencies
 ├── requirements_bayes.txt       # Bayesian dependencies
 ├── .pytensorrc                  # PyTensor configuration
@@ -186,7 +184,6 @@ who-mortality-statistical-analysis/
 ### Configuration Files
 - `src/config.py`: Unified settings for all analyses
 - `.pytensorrc`: PyTensor compiler configuration
-- `run_bayes.sh`: Bayesian execution with environment setup
 
 ## 🔍 Validation & Reproducibility
 
@@ -218,11 +215,8 @@ python src/bayes_analysis.py > bayesian_results.txt
 ### PyTensor Compilation Issues
 If encountering C++ compilation errors:
 ```bash
-# Use the provided script that handles environment setup
-./run_bayes.sh
-
-# Or manually set flags
-export PYTENSOR_FLAGS='optimizer=fast_compile,cxx='
+# Set environment flags and clear cache
+export PYTENSOR_FLAGS='optimizer=fast_compile,floatX=float32,device=cpu,cxx='
 rm -rf ~/.pytensor  # Clear cache
 python src/bayes_analysis.py
 ```
