@@ -1,0 +1,10 @@
+[global]
+floatX = float64
+optimizer = fast_compile
+cxx =
+
+[blas]
+ldflags =
+
+[gcc]
+cxxflags = -Wno-c++11-narrowing
