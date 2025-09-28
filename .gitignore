@@ -25,12 +25,6 @@ venv.bak/
 .DS_Store
 Thumbs.db
 
-# Data files (keep only raw data)
-data/processed/*
-!data/processed/.gitkeep
-*.csv
-!data/raw/ghe2021_deaths_global_new2.xlsx
-
 # Output files
 reports/figures/*
 reports/tables/*
