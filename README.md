@@ -1,21 +1,28 @@
-# WHO Mortality Statistical Analysis (Python Implementation)
+# WHO Mortality Statistical Analysis
+## Classical & Bayesian Statistical Framework
 
 ## 📊 Project Overview
-**Python-based Statistical Analysis Framework for WHO Global Health Estimates 2021**
+**Comprehensive Statistical Analysis Framework for WHO Global Health Estimates 2021**
 
-This repository contains the Python implementation for analyzing WHO mortality data using classical statistical methods. It serves as a computational framework for data processing, statistical testing, and visualization.
+This repository implements both classical and Bayesian statistical approaches for analyzing WHO mortality data, providing a complete computational framework for data processing, statistical testing, and visualization.
 
-> **Note**: This is the pure Python implementation. Course assignment documents (including JASP analyses) are located in the `assignment-docs/` directory for reference only.
+## 🎯 Analysis Framework
+The project implements two complementary statistical paradigms:
 
-## 🎯 Project Focus
-This repository focuses on **programmatic statistical analysis** using Python:
-- Automated data processing pipeline
-- Reproducible statistical tests
-- Code-based visualization
-- Open-source implementation
+### Classical Statistics
+- Hypothesis testing (t-tests, ANOVA, chi-square)
+- Correlation analysis
+- Post-hoc comparisons (Tukey HSD, Games-Howell)
+- Effect size calculations
+
+### Bayesian Statistics
+- Bayesian t-tests with Bayes factors
+- Bayesian ANOVA with posterior distributions
+- Bayesian contingency analysis
+- MCMC sampling with PyMC
 
 ## 📁 Data Source
-WHO Global Health Estimates 2021: Deaths by Cause, Age, and Sex
+**WHO Global Health Estimates 2021: Deaths by Cause, Age, and Sex**
 - Dataset: `ghe2021_deaths_global_new2.xlsx`
 - Processed records: 1,024 observations
 - Features: 128 causes of death × 8 age groups × 2 genders
@@ -27,6 +34,7 @@ WHO Global Health Estimates 2021: Deaths by Cause, Age, and Sex
 ### Prerequisites
 - Python 3.9+
 - pip package manager
+- C++ compiler (for PyTensor/PyMC)
 
 ### Installation & Execution
 
@@ -40,15 +48,23 @@ python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # 3. Install dependencies
-pip install -r requirements.txt
+pip install -r requirements.txt           # Classical analysis
+pip install -r requirements_bayes.txt     # Bayesian analysis
 
 # 4. Run complete analysis pipeline
-python run_analysis.py
 
+## Classical Analysis
+python run_analysis.py                    # Complete classical pipeline
 # Or run modules separately:
-python src/data_processing.py        # Process raw data
-python src/statistical_analysis.py   # Run statistical tests
-python visualize_results.py          # Generate visualizations
+python src/data_processing.py             # Process raw data
+python src/statistical_analysis.py        # Run statistical tests
+python src/visualize_classical.py         # Generate classical visualizations
+
+## Bayesian Analysis
+./run_bayes.sh                           # Complete Bayesian pipeline (with compiler fix)
+# Or run modules separately:
+python src/bayes_analysis.py             # Run Bayesian analysis
+python src/visualize_bayes.py            # Generate Bayesian visualizations
 ```
 
 ## 📂 Project Structure
@@ -57,8 +73,12 @@ python visualize_results.py          # Generate visualizations
 who-mortality-statistical-analysis/
 │
 ├── src/                          # Core Python modules
+│   ├── config.py                # Unified configuration
 │   ├── data_processing.py       # WHO data ETL pipeline
-│   ├── statistical_analysis.py  # Statistical tests implementation
+│   ├── statistical_analysis.py  # Classical statistical tests
+│   ├── bayes_analysis.py        # Bayesian statistical analysis
+│   ├── visualize_classical.py   # Classical visualization
+│   ├── visualize_bayes.py       # Bayesian visualization
 │   └── __init__.py
 │
 ├── data/
@@ -68,148 +88,189 @@ who-mortality-statistical-analysis/
 │       └── who_mortality_clean.csv
 │
 ├── figures/                      # Generated visualizations
-│   ├── statistical_analysis_overview.png
-│   ├── correlation_heatmap.png
-│   ├── age_mortality_pattern.png
-│   └── screenshots/              # JASP analysis screenshots
-│       ├── ss-01.png            # Data structure
-│       ├── ss-02.png            # Descriptive statistics
-│       ├── ss-03.png            # Kruskal-Wallis test
-│       ├── ss-04.png            # Games-Howell post-hoc
-│       ├── ss-05.png            # Mean plot with error bars
-│       └── ss-06.png            # Boxplot distribution
+│   ├── classical/                # Classical analysis outputs
+│   │   ├── statistical_analysis_overview.png
+│   │   ├── correlation_heatmap.png
+│   │   └── age_mortality_pattern.png
+│   ├── bayesian/                 # Bayesian analysis outputs
+│   │   ├── posterior_distributions.png
+│   │   ├── bayes_factors.png
+│   │   ├── anova_results.png
+│   │   ├── chi_square_results.png
+│   │   └── regression_diagnostics.png
+│   └── screenshots/              # JASP validation screenshots
 │
 ├── notebooks/                    # Jupyter exploration notebooks
 │   └── 01_initial_exploration.ipynb
 │
-├── assignment-docs/              # Course assignment materials (reference only)
-│   └── 期末项目-第一部分-经典统计学.md
+├── assignment-docs/              # Course materials (reference)
+│   ├── 期末项目-第一部分-经典统计学.md
+│   └── 期末项目-第二部分-贝叶斯统计学.md
 │
-├── run_analysis.py              # Main execution script
-├── visualize_results.py         # Visualization generator
-├── requirements.txt             # Python dependencies
+├── run_analysis.py              # Classical analysis executor
+├── run_bayes.sh                 # Bayesian analysis executor
+├── requirements.txt             # Classical dependencies
+├── requirements_bayes.txt       # Bayesian dependencies
+├── .pytensorrc                  # PyTensor configuration
 └── README.md                    # This file
 ```
 
 ## 🔬 Statistical Analysis Pipeline
 
-### 1. Data Processing Module (`src/data_processing.py`)
-- **Input**: WHO Excel file with mortality data
-- **Processing**:
-  - Parse multi-level Excel structure
-  - Extract 8 age groups × 128 causes
-  - Handle missing values and data validation
-  - Calculate gender ratios
-- **Output**: Standardized CSV with 1,024 records
+### 1. Data Processing (`src/data_processing.py`)
+- Parse multi-level WHO Excel structure
+- Extract 8 age groups × 128 causes × 2 genders
+- Handle missing values and data validation
+- Calculate gender ratios and age distributions
+- Export standardized CSV (1,024 records)
 
-### 2. Statistical Analysis Module (`src/statistical_analysis.py`)
-Implements comprehensive statistical testing:
+### 2. Classical Analysis (`src/statistical_analysis.py`)
 
-#### Descriptive Statistics
-- Mean, median, standard deviation
-- Quartiles and range
-- Distribution characteristics
-
-#### Hypothesis Testing
-- **Gender Differences**: Paired t-test (t=3.16, p=0.002)
-- **Age Group Comparisons**: One-way ANOVA (F=8.78, p<0.001)
-- **Independence Testing**: Chi-square test (χ²=6.37e7, p<0.001)
-- **Correlation Analysis**: Pearson correlations (age vs deaths: r=0.189)
-- **Post-hoc Analysis**: Tukey HSD for pairwise comparisons
-
-### 3. Visualization Module (`visualize_results.py`)
-Generates publication-quality figures:
-- Multi-panel statistical overview
-- Correlation heatmaps
-- J-shaped mortality curve visualization (exponential pattern)
-
-## 📊 Key Findings
-
-### Statistical Results Summary
+#### Hypothesis Testing Results
 | Test          | Statistic   | p-value | Effect Size | Interpretation         |
 | ------------- | ----------- | ------- | ----------- | ---------------------- |
 | Gender T-test | t = 3.16    | 0.002   | d = 0.031   | Significant difference |
 | Age ANOVA     | F = 8.78    | <0.001  | η² = 0.057  | Significant variation  |
 | Chi-square    | χ² = 6.37e7 | <0.001  | V = 0.434   | Strong dependency      |
 
-### Mortality Patterns
-- **J-shaped distribution**: Lowest at 5-14 years → Continuous exponential rise with age
+#### Key Findings
+- **J-shaped mortality curve**: Exponential increase with age
 - **Peak mortality**: 70+ age group (252,819 mean deaths)
 - **Lowest mortality**: 5-14 age group (6,486 mean deaths)
-- **Mortality ratio**: 70+/5-14 = 39x
 - **Gender ratio**: Male/Female = 1.17
 
-### Top 5 Causes of Death (2021)
-1. Ischaemic heart disease: 9,033,116
-2. COVID-19: 8,721,899
-3. Stroke: 6,972,662
-4. COPD: 3,519,685
-5. Lower respiratory infections: 2,453,675
+### 3. Bayesian Analysis (`src/bayes_analysis.py`)
+
+#### Bayesian Test Results
+| Analysis           | Bayes Factor | Evidence       | Posterior Mean | 95% HDI           |
+| ------------------ | ------------ | -------------- | -------------- | ----------------- |
+| Gender Comparison  | BF₁₀ = 28.5  | Strong for H₁  | δ = 0.098      | [0.031, 0.165]    |
+| Age Group Effect   | BF₁₀ > 1000  | Decisive for H₁| Multiple       | See distributions |
+| Independence Test  | BF₁₀ > 1000  | Decisive       | -              | -                 |
+
+#### MCMC Configuration
+- Sampling: 1000 draws, 500 tuning steps
+- Chains: 4 parallel chains
+- Convergence: R̂ < 1.01 for all parameters
+- Effective samples: > 800 per parameter
+
+### 4. Visualization Modules
+
+#### Classical Visualizations (`src/visualize_classical.py`)
+- Multi-panel statistical overview
+- Correlation heatmaps
+- Age-mortality J-curve visualization
+
+#### Bayesian Visualizations (`src/visualize_bayes.py`)
+- Posterior distributions with HDI
+- Bayes factor comparisons
+- MCMC trace plots
+- Regression diagnostics
+
+## 📊 Top 5 Causes of Death (2021)
+1. **Ischaemic heart disease**: 9,033,116 deaths
+2. **COVID-19**: 8,721,899 deaths
+3. **Stroke**: 6,972,662 deaths
+4. **COPD**: 3,519,685 deaths
+5. **Lower respiratory infections**: 2,453,675 deaths
 
 ## 🛠 Technologies Used
+
+### Core Libraries
 - **Data Processing**: pandas, numpy, openpyxl
-- **Statistical Analysis**: scipy, statsmodels
+- **Classical Statistics**: scipy, statsmodels, pingouin
+- **Bayesian Statistics**: PyMC, ArviZ, PyTensor
 - **Visualization**: matplotlib, seaborn
 - **Environment**: Python 3.9+
 
-## 📈 Progress Status
-
-### ✅ Completed Tasks
-- [x] Project pip freeze > requirements.txtamework setup
-- [x] Data processing pipeline
-- [x] Statistical analysis implementation
-- [x] Visualization generation
-- [x] Results validation
-- [x] Documentation
-
-### 🔄 Current Status
-- All Week 1 deliverables completed
-- Python implementation fully functional
-- Results validated against JASP software
+### Configuration Files
+- `src/config.py`: Unified settings for all analyses
+- `.pytensorrc`: PyTensor compiler configuration
+- `run_bayes.sh`: Bayesian execution with environment setup
 
 ## 🔍 Validation & Reproducibility
 
-This implementation has been validated against JASP statistical software:
-- Kruskal-Wallis H statistic: **1086.00** (exact match)
+### Cross-validation with JASP
+- Kruskal-Wallis H: **1086.00** (exact match)
 - All p-values < 0.001 (consistent)
 - Effect sizes within 0.01 tolerance
 
-To reproduce results:
+### Reproducibility Commands
 ```bash
-python src/statistical_analysis.py > results.txt
+# Classical analysis reproducibility
+python src/statistical_analysis.py > classical_results.txt
+
+# Bayesian analysis reproducibility
+export PYTENSOR_FLAGS='optimizer=fast_compile,floatX=float32'
+python src/bayes_analysis.py > bayesian_results.txt
 ```
 
-## 📋 Module Documentation
+## 📈 Analysis Workflow
+
+1. **Data Preparation**: Process WHO Excel → Standardized CSV
+2. **Classical Analysis**: Frequentist hypothesis testing
+3. **Bayesian Analysis**: Posterior distributions and Bayes factors
+4. **Visualization**: Generate publication-quality figures
+5. **Validation**: Cross-check with JASP software
+
+## ⚠️ Troubleshooting
+
+### PyTensor Compilation Issues
+If encountering C++ compilation errors:
+```bash
+# Use the provided script that handles environment setup
+./run_bayes.sh
+
+# Or manually set flags
+export PYTENSOR_FLAGS='optimizer=fast_compile,cxx='
+rm -rf ~/.pytensor  # Clear cache
+python src/bayes_analysis.py
+```
+
+### Memory Issues with MCMC
+Reduce sampling parameters in `src/config.py`:
+- `MCMC_SAMPLES = 500` (from 1000)
+- `MCMC_TUNE = 200` (from 500)
+
+## 📋 Module API Documentation
+
+### config.py
+```python
+# Unified configuration for all analyses
+AGE_GROUP_ORDER      # Standard age group ordering
+AGE_ENCODING         # Age group to numeric mapping
+SIGNIFICANCE_LEVEL   # α = 0.05
+MCMC_SAMPLES        # Bayesian sampling parameters
+```
 
 ### data_processing.py
 ```python
-WHODataProcessor: Main class for data handling
-- load_data(): Load Excel file
-- parse_structure(): Identify data regions
-- process_data(): Clean and transform
-- save_processed_data(): Export to CSV
+WHODataProcessor:
+  - load_data()          # Load Excel file
+  - process_data()       # Clean and transform
+  - save_processed_data() # Export to CSV
 ```
 
 ### statistical_analysis.py
 ```python
-ClassicalStatistics: Statistical testing suite
-- descriptive_statistics(): Summary stats
-- gender_ttest(): Gender comparison
-- age_group_anova(): Age analysis
-- correlation_analysis(): Variable relationships
-- chi_square_test(): Independence testing
+ClassicalStatistics:
+  - descriptive_statistics()  # Summary statistics
+  - gender_ttest()           # Gender comparison
+  - age_group_anova()        # Age analysis
+  - chi_square_test()        # Independence testing
 ```
 
-## ⚠️ Important Notes
-
-1. **This repository contains only Python implementations** - No JASP or other proprietary software dependencies
-2. **Assignment documents** in `assignment-docs/` are for reference only
-3. **Data file required**: Place WHO Excel file in `data/raw/` before running
-4. **Virtual environment recommended** to ensure package compatibility
+### bayes_analysis.py
+```python
+BayesianAnalysis:
+  - bayesian_ttest()         # Bayesian t-test
+  - bayesian_anova()         # Bayesian ANOVA
+  - bayesian_contingency()   # Bayesian chi-square
+  - calculate_bayes_factors() # Evidence strength
+```
 
 ## 🤝 Contributing
 
-For code contributions:
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/new-analysis`)
 3. Commit changes (`git commit -m 'Add new analysis'`)
@@ -218,18 +279,21 @@ For code contributions:
 
 ## 📝 Citation
 
-If using this code for research:
-```
-WHO Mortality Statistical Analysis (2025).
-Python Implementation for WHO Global Health Estimates 2021.
-https://github.com/tao-hpu/who-mortality-statistical-analysis
+```bibtex
+@software{who_mortality_analysis_2025,
+  title = {WHO Mortality Statistical Analysis: Classical and Bayesian Framework},
+  author = {Tao et al.},
+  year = {2025},
+  url = {https://github.com/tao-hpu/who-mortality-statistical-analysis},
+  version = {2.0}
+}
 ```
 
 ## 📄 License
 Academic use only - MSAI Program 2025
 
 ## 📞 Support
-For technical issues, please open a GitHub Issue or contact the repository maintainer.
+For technical issues, please open a GitHub Issue.
 
 ---
-*Last Updated: 2025-09-14*
+*Last Updated: 2025-09-28*
