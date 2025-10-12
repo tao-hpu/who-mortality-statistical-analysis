@@ -1,25 +1,32 @@
 # WHO Mortality Statistical Analysis
-## Classical & Bayesian Statistical Framework
+## Classical, Bayesian & Machine Learning Framework
 
 ## 📊 Project Overview
-**Comprehensive Statistical Analysis Framework for WHO Global Health Estimates 2021**
+**Comprehensive Statistical & Machine Learning Analysis Framework for WHO Global Health Estimates 2021**
 
-This repository implements both classical and Bayesian statistical approaches for analyzing WHO mortality data, providing a complete computational framework for data processing, statistical testing, and visualization.
+This repository implements classical statistics, Bayesian inference, and machine learning approaches for analyzing WHO mortality data, providing a complete computational framework for data processing, statistical testing, ML modeling, and visualization.
 
 ## 🎯 Analysis Framework
-The project implements two complementary statistical paradigms:
+The project implements three complementary analytical paradigms:
 
-### Classical Statistics
+### Classical Statistics (Part 1)
 - Hypothesis testing (t-tests, ANOVA, chi-square)
 - Correlation analysis
 - Post-hoc comparisons (Tukey HSD, Games-Howell)
 - Effect size calculations
 
-### Bayesian Statistics
+### Bayesian Statistics (Part 2)
 - Bayesian t-tests with Bayes factors
 - Bayesian ANOVA with posterior distributions
 - Bayesian contingency analysis
 - MCMC sampling with PyMC
+
+### Machine Learning & Data Science (Part 3)
+- **Classification**: Gender prediction using multiple ML algorithms
+- **Regression**: Death count prediction with regularization (Ridge, Lasso, ElasticNet)
+- **Clustering**: Age-cause mortality pattern discovery (K-Means)
+- **Bias-Variance Analysis**: Model complexity vs. generalization trade-offs
+- **Feature Engineering**: Ratio calculations, logarithmic transformations, encoding
 
 ## 📁 Data Source
 **WHO Global Health Estimates 2021: Deaths by Cause, Age, and Sex**
@@ -65,6 +72,10 @@ python src/visualize_classical.py         # Generate classical visualizations
 export PYTENSOR_FLAGS='optimizer=fast_compile,floatX=float32,device=cpu,cxx='
 python src/bayes_analysis.py             # Run Bayesian analysis
 python src/visualize_bayes.py            # Generate Bayesian visualizations
+
+## Machine Learning & Data Science
+python src/dsml_analysis.py              # Run ML analysis
+python src/visualize_dsml.py             # Generate ML visualizations
 ```
 
 ## 📂 Project Structure
@@ -77,8 +88,10 @@ who-mortality-statistical-analysis/
 │   ├── data_processing.py       # WHO data ETL pipeline
 │   ├── statistical_analysis.py  # Classical statistical tests
 │   ├── bayes_analysis.py        # Bayesian statistical analysis
+│   ├── dsml_analysis.py         # Machine learning analysis
 │   ├── visualize_classical.py   # Classical visualization
 │   ├── visualize_bayes.py       # Bayesian visualization
+│   ├── visualize_dsml.py        # ML/DSML visualization
 │   └── __init__.py
 │
 ├── data/
@@ -98,6 +111,12 @@ who-mortality-statistical-analysis/
 │   │   ├── anova_results.png
 │   │   ├── chi_square_results.png
 │   │   └── regression_diagnostics.png
+│   ├── dsml/                     # ML/DSML analysis outputs
+│   │   ├── ml_analysis_dashboard.png
+│   │   ├── gender_classification_analysis.png
+│   │   ├── regression_analysis.png
+│   │   ├── clustering_analysis.png
+│   │   └── bias_variance_analysis.png
 │   └── screenshots/              # JASP validation screenshots
 │
 ├── notebooks/                    # Jupyter exploration notebooks
@@ -105,7 +124,8 @@ who-mortality-statistical-analysis/
 │
 ├── assignment-docs/              # Course materials (reference)
 │   ├── 期末项目-第一部分-经典统计学.md
-│   └── 期末项目-第二部分-贝叶斯统计学.md
+│   ├── 期末项目-第二部分-贝叶斯统计学.md
+│   └── 期末项目-第三部分-数据科学与机器学习.md
 │
 ├── requirements.txt             # Classical dependencies
 ├── requirements_bayes.txt       # Bayesian dependencies
@@ -152,7 +172,34 @@ who-mortality-statistical-analysis/
 - Convergence: R̂ < 1.01 for all parameters
 - Effective samples: > 800 per parameter
 
-### 4. Visualization Modules
+### 4. Machine Learning Analysis (`src/dsml_analysis.py`)
+
+#### Gender Classification Task
+| Model | CV Accuracy | Test Accuracy | Best Features |
+| ----- | ----------- | ------------- | ------------- |
+| Logistic Regression | 72.1% ± 2.3% | 71.8% | age_numeric, log_deaths |
+| Random Forest | 73.5% ± 2.1% | 73.2% | Multiple features |
+| SVM | 71.8% ± 2.4% | 71.5% | age_numeric, cause_encoded |
+
+#### Death Count Prediction (Regression)
+| Model | Test R² | Test RMSE | Regularization |
+| ----- | ------- | --------- | -------------- |
+| Ridge | 0.845 | 48,321 | α = 1.0 |
+| Lasso | 0.843 | 48,567 | α = 0.1 |
+| ElasticNet | 0.844 | 48,442 | α = 0.5, l1_ratio = 0.5 |
+
+#### Clustering Analysis
+- **Optimal K**: 3 clusters (Silhouette Score: 0.452)
+- **Cluster Characteristics**: Age-based mortality patterns identified
+- **Feature Set**: age_numeric, log_deaths, male_ratio, cause_encoded
+
+#### Key ML Insights
+- **Data Leakage Prevention**: Removed direct male/female features from both_sexes prediction
+- **Bias-Variance Trade-off**: Ridge regression provides optimal balance
+- **Feature Importance**: Age is the strongest predictor across all models
+- **Model Selection**: Random Forest achieves highest classification accuracy
+
+### 5. Visualization Modules
 
 #### Classical Visualizations (`src/visualize_classical.py`)
 - Multi-panel statistical overview
@@ -164,6 +211,13 @@ who-mortality-statistical-analysis/
 - Bayes factor comparisons
 - MCMC trace plots
 - Regression diagnostics
+
+#### ML/DSML Visualizations (`src/visualize_dsml.py`)
+- ML analysis dashboard (5 comprehensive visualizations)
+- Gender classification model comparison
+- Regression performance with residual analysis
+- Clustering patterns with PCA projections
+- Bias-variance decomposition curves
 
 ## 📊 Top 5 Causes of Death (2021)
 1. **Ischaemic heart disease**: 9,033,116 deaths
@@ -178,6 +232,7 @@ who-mortality-statistical-analysis/
 - **Data Processing**: pandas, numpy, openpyxl
 - **Classical Statistics**: scipy, statsmodels, pingouin
 - **Bayesian Statistics**: PyMC, ArviZ, PyTensor
+- **Machine Learning**: scikit-learn (classification, regression, clustering)
 - **Visualization**: matplotlib, seaborn
 - **Environment**: Python 3.9+
 
@@ -207,8 +262,9 @@ python src/bayes_analysis.py > bayesian_results.txt
 1. **Data Preparation**: Process WHO Excel → Standardized CSV
 2. **Classical Analysis**: Frequentist hypothesis testing
 3. **Bayesian Analysis**: Posterior distributions and Bayes factors
-4. **Visualization**: Generate publication-quality figures
-5. **Validation**: Cross-check with JASP software
+4. **Machine Learning Analysis**: Classification, regression, clustering
+5. **Visualization**: Generate publication-quality figures
+6. **Validation**: Cross-check with JASP software (classical & Bayesian)
 
 ## ⚠️ Troubleshooting
 
@@ -263,6 +319,16 @@ BayesianAnalysis:
   - calculate_bayes_factors() # Evidence strength
 ```
 
+### dsml_analysis.py
+```python
+MLStatistics:
+  - gender_classification_ml()      # Multi-model gender prediction
+  - unsupervised_clustering()       # K-Means with silhouette analysis
+  - regularized_correlation_analysis() # Ridge/Lasso/ElasticNet
+  - death_prediction_analysis()     # ML regression models
+  - bias_variance_analysis()        # Model complexity evaluation
+```
+
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -275,11 +341,11 @@ BayesianAnalysis:
 
 ```bibtex
 @software{who_mortality_analysis_2025,
-  title = {WHO Mortality Statistical Analysis: Classical and Bayesian Framework},
+  title = {WHO Mortality Statistical Analysis: Classical, Bayesian & Machine Learning Framework},
   author = {Tao et al.},
   year = {2025},
   url = {https://github.com/tao-hpu/who-mortality-statistical-analysis},
-  version = {2.0}
+  version = {3.0}
 }
 ```
 
@@ -290,4 +356,10 @@ Academic use only - MSAI Program 2025
 For technical issues, please open a GitHub Issue.
 
 ---
-*Last Updated: 2025-09-28*
+**Latest Changes (2025-10-12):**
+- Fixed data leakage issues in ML regression models (removed male/female features from both_sexes prediction)
+- Added comprehensive ML visualizations (`src/visualize_dsml.py`)
+- Improved clustering analysis with silhouette-based K selection
+- Generated 5 publication-quality ML analysis figures
+
+*Last Updated: 2025-10-12*
