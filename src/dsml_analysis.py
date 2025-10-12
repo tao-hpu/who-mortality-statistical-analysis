@@ -21,7 +21,7 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.svm import SVC, SVR
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error, r2_score, silhouette_score
 from sklearn.cluster import KMeans
 import warnings
 
@@ -403,22 +403,37 @@ class MLStatistics:
         # 标准化
         X_cluster_scaled = self.scaler.fit_transform(X_cluster)
 
-        # 使用肘部法则确定最佳聚类数
-        inertias = []
+        # 使用轮廓系数确定最佳聚类数
+        silhouette_scores = []
         K_range = range(2, 8)
 
         for k in K_range:
             kmeans = KMeans(n_clusters=k, random_state=42)
-            kmeans.fit(X_cluster_scaled)
-            inertias.append(kmeans.inertia_)
+            labels = kmeans.fit_predict(X_cluster_scaled)
+            score = silhouette_score(X_cluster_scaled, labels)
+            silhouette_scores.append(score)
 
-        # 选择最佳K（简化版，选择拐点）
-        best_k = 3  # 可以根据肘部法则动态选择
+        # 选择最佳K（轮廓系数最高）
+        best_k = K_range[np.argmax(silhouette_scores)]
+        best_silhouette = max(silhouette_scores)
+
+        print(f"\n📊 Optimal K Selection (Silhouette Method):")
+        for k, score in zip(K_range, silhouette_scores):
+            marker = " ← Best" if k == best_k else ""
+            print(f"   K={k}: Silhouette Score = {score:.3f}{marker}")
 
         # 执行聚类
         kmeans = KMeans(n_clusters=best_k, random_state=42)
         cluster_labels = kmeans.fit_predict(X_cluster_scaled)
         self.data['cluster'] = cluster_labels
+
+        # 保存K值选择结果
+        self.results["k_selection"] = {
+            'K_range': list(K_range),
+            'silhouette_scores': silhouette_scores,
+            'best_k': best_k,
+            'best_silhouette': best_silhouette
+        }
 
         # 分析聚类结果
         print(f"📈 Clustering Results (K={best_k}):")
@@ -447,13 +462,14 @@ class MLStatistics:
     def regularized_correlation_analysis(self):
         """
         使用正则化回归分析变量关系
+        注意：避免数据泄露，不使用male和female直接预测both_sexes
         """
         print("\n" + "=" * 50)
         print("REGULARIZED CORRELATION ANALYSIS")
         print("=" * 50)
 
-        # 准备回归数据
-        X = self.data[['age_numeric', 'male', 'female', 'cause_encoded']]
+        # 准备回归数据（修复数据泄露：移除male和female）
+        X = self.data[['age_numeric', 'male_ratio', 'log_deaths', 'cause_encoded']]
         y = self.data['both_sexes']
 
         # 标准化特征
@@ -514,13 +530,14 @@ class MLStatistics:
     def death_prediction_analysis(self):
         """
         使用多种ML回归算法预测死亡数
+        注意：避免数据泄露，不使用male和female直接预测both_sexes
         """
         print("\n" + "=" * 50)
         print("DEATH PREDICTION ML ANALYSIS")
         print("=" * 50)
 
-        # 准备预测数据
-        features = ['age_numeric', 'male', 'female', 'male_ratio', 'cause_encoded']
+        # 准备预测数据（修复数据泄露：移除male和female）
+        features = ['age_numeric', 'male_ratio', 'log_deaths', 'cause_encoded']
         X = self.data[features]
         y = self.data['both_sexes']
 
@@ -590,13 +607,14 @@ class MLStatistics:
     def bias_variance_analysis(self):
         """
         偏差-方差权衡分析（回归任务）
+        注意：避免数据泄露，不使用male和female直接预测both_sexes
         """
         print("\n" + "=" * 50)
         print("BIAS-VARIANCE TRADEOFF ANALYSIS")
         print("=" * 50)
 
-        # 准备数据
-        X = self.data[['age_numeric', 'male', 'female', 'cause_encoded']]
+        # 准备数据（修复数据泄露：移除male和female）
+        X = self.data[['age_numeric', 'male_ratio', 'log_deaths', 'cause_encoded']]
         y = self.data['both_sexes']
         X_scaled = self.scaler.fit_transform(X)
 
