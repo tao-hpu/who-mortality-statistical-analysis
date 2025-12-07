@@ -39,6 +39,3 @@ xarray==2024.7.0
 xarray-einstats==0.7.0
 zipp==3.23.0
 scikit-learn==1.6.1
-nltk==3.9.2
-wordcloud==1.9.4
-vaderSentiment==3.3.2
