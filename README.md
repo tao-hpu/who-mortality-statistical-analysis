@@ -1,7 +1,7 @@
 # WHO Mortality Statistical Analysis
 ## Classical, Bayesian & Machine Learning Framework
 
-[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
+[![Python Version](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-Academic-green.svg)](LICENSE)
 [![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Statistical Framework](https://img.shields.io/badge/stats-Classical%20%7C%20Bayesian%20%7C%20ML-orange.svg)](README.md)
@@ -121,7 +121,7 @@ Peak Mortality: 70+ age group (252,819 mean deaths per cause)
 | **OS** | Linux/macOS/Windows | Linux (best PyTensor support) |
 
 ### Software Prerequisites
-- **Python**: 3.9 or higher
+- **Python**: 3.11 (Pillow 13 requires 3.11+; `scipy==1.10.1` requires Python below 3.12)
 - **Package Manager**: pip (included with Python)
 - **C++ Compiler**:
   - Linux: `gcc/g++` (install via `apt-get install build-essential`)
@@ -370,7 +370,7 @@ who-mortality-statistical-analysis/
 - **Bayesian Statistics**: PyMC, ArviZ, PyTensor
 - **Machine Learning**: scikit-learn (classification, regression, clustering)
 - **Visualization**: matplotlib, seaborn
-- **Environment**: Python 3.9+
+- **Environment**: Python 3.11
 
 ### Configuration Files
 - `src/config.py`: Unified settings for all analyses
@@ -491,7 +491,7 @@ All analyses use fixed random seeds:
 - Bayesian: `random_seed=42` in PyMC models
 - ML: `random_state=42` in scikit-learn
 
-Run the same Python version (3.9+) and package versions from `requirements.txt`.
+Run Python 3.11 and the package versions from `requirements.txt`.
 
 **Q: Can I run this on Windows?**
 Yes, but:
